@@ -1592,12 +1592,12 @@ function App() {
                 story of American tankers at war.
               </p>
               <a 
-                href="https://www.amazon.com/Bandit-Inside-Company-Battles-Campaigns/dp/1985903903" 
-                target="_blank" 
+                href="https://www.kentuckypress.com/9781985903906/bandit/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="cta-button"
               >
-                <BookIcon /> Pre-Order on Amazon
+                <BookIcon /> Pre-Order Now
               </a>
             </div>
           </div>
