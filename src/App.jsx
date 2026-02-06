@@ -1314,6 +1314,7 @@ const HlsVideoPlayer = ({ src }) => {
 function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const [timelineExpanded, setTimelineExpanded] = useState(false);
   const videoPlayerRef = useRef(null);
 
   const handleVideoSelect = (index) => {
@@ -1331,14 +1332,35 @@ function App() {
   ];
 
   const timeline = [
-    { date: "August 1990", title: "Iraq Invades Kuwait", description: "Saddam Hussein orders Iraqi forces into Kuwait. The UN condemns the invasion and begins building a military coalition." },
-    { date: "November 1990", title: "1st Armored Division Alerted", description: "The 'Old Ironsides' division receives deployment orders. 2-70 Armor begins preparations at Erlangen, Germany." },
-    { date: "December 31, 1990", title: "Deployment to Saudi Arabia", description: "Most battalion personnel fly from Germany to Saudi Arabia. Equipment ships from Bremerhaven arrive at Dammam." },
-    { date: "February 24, 1991", title: "G-Day: Ground War Begins", description: "2-70 Armor crosses into Iraq as part of VII Corps' main flanking attack against the Republican Guard." },
-    { date: "February 25, 1991", title: "Battle of Al Busayyah", description: "The Iron Tigers attack a major Iraqi logistics center defended by infantry and tanks, quickly defeating the enemy." },
-    { date: "February 27, 1991", title: "Battle of Medina Ridge", description: "The largest tank battle since World War II. 2nd Brigade destroys 61 T-72s and T-55s, 34 APCs in under an hour." },
-    { date: "February 28, 1991", title: "Ceasefire Declared", description: "Combat operations end. The battalion maintains combat posture in northern Kuwait and southern Iraq." },
-    { date: "May 1991", title: "Homecoming to Erlangen", description: "The main body redeploys to Erlangen, Germany. The Iron Tigers are awarded the Valorous Unit Award." }
+    { date: "August 2, 1990", title: "Iraq Invades Kuwait", description: "Iraq invades Kuwait. In less than 36 hours, Iraqi Republican Guard Forces overrun a country the size of New Jersey. Three Iraqi divisions consolidate in southern Kuwait, seemingly poised to invade Saudi Arabia, threatening the Saudi oil fields less than 100 kilometers south. The UN condemns the invasion and begins building a military coalition." },
+    { date: "August 7, 1990", title: "Operation Desert Shield Begins", description: "Elements of the 82nd Airborne Division and US Air Force F-16 squadrons arrive in Saudi Arabia, beginning Operation Desert Shield. Over the next two months, the US deploys the XVIII Airborne Corps—including the 82nd and 101st Airborne Divisions, 24th Mechanized Infantry Division, and 3rd Armored Cavalry Regiment—to defend Saudi Arabia from Iraqi invasion threats." },
+    { date: "November 8, 1990", title: "President Announces Force Increase", description: "The President announces that US forces in the Persian Gulf will be increased, allowing the Coalition an offensive option if Iraq does not obey UN Security Council resolutions. From Europe, the VII \"Jayhawk\" Corps—consisting of the 1st and 3rd Armored Divisions and 2nd Armored Cavalry Regiment—will deploy, joined by the 1st Infantry Division and 1st Cavalry Division from the Continental United States." },
+    { date: "November 1990", title: "1st Armored Division Alerted", description: "The 'Old Ironsides' division receives deployment orders. 2-70 Armor begins preparations at Erlangen, Germany. Over the next few weeks, vehicles are moved by rail, road convoy, and barge to Bremerhaven for shipment to Saudi Arabia. Tankers conduct tank gunnery, borrowing 3rd Infantry Division tanks at Grafenwoehr." },
+    { date: "December 31, 1990 – January 3, 1991", title: "Deployment to Saudi Arabia", description: "2-70 Armor deploys to Saudi Arabia, arriving in Dammam and moving into Khobar Towers—an empty housing area built for 40,000 Bedouin tribesmen in the 1980s. The tribes had refused to give up their nomadic life, and the apartments had remained empty." },
+    { date: "January 5, 1991", title: "Equipment Arrives at Dammam", description: "The battalion's tracked vehicles arrive on the USNS Bellatrix, a Naval Reserve Fast Supply Ship carrying heavy equipment for 2nd Brigade, 1st Armored Division. Tanks receive an extra plate of depleted uranium armor, bringing them to M1A1 Heavy Armor (HA) standard. Combat vehicles are painted sand color while most wheeled vehicles remain Woodland Green. The battalion's wheeled vehicles are on two other ships—the AutoChamp, a Korean-flagged automobile transport, and the Scandia Link, a Scandinavian ferry—not due for two weeks at the port of Al Jubayl, 80 kilometers north of Dammam." },
+    { date: "January 10–12, 1991", title: "Move to TAA Thompson", description: "2-70 Armor moves to Tactical Assembly Area (TAA) Thompson using the Trans-Arabian Pipeline Road. Soldiers travel in buses and vehicles on tank transporters for the 16-hour, 440-kilometer road march. TAA Thompson is a flat, featureless desert. Company positions are marked by plywood latrines, showers, and shaving basins built from 2x4 lumber using Vietnam-era plans. Two other ubiquitous items mark each base camp—a burn pit for trash, and piss tubes." },
+    { date: "January 12, 1991", title: "Schwarzkopf Visits 2-70 Armor", description: "General Norman Schwarzkopf, commander of US Central Command and senior American commander for Desert Shield, visits B Company, 2-70 Armor. The Iron Tigers are the only battalion in the 1st Armored Division that he visits." },
+    { date: "January 15, 1991", title: "Tank Gunnery", description: "Tank companies move to a range complex using lensatic compasses to navigate. Tanks fire their main guns, proofing the fire control systems, and test fire machine guns." },
+    { date: "January 17, 1991", title: "Desert Storm Begins", description: "At 0150, the battalion radio network announces that Coalition forces have fired Tomahawk Land Attack Missiles (TLAMs) and followed with aircraft attacks. Operation Desert Shield becomes Operation Desert Storm." },
+    { date: "January 17 – February 13, 1991", title: "Task Force Formation & Training", description: "2-70 Armor becomes Task Force 2-70 Armor as additional enablers arrive from the division, including an infantry company, engineer company, and air defense artillery platoon. Training continues with increasingly complex maneuvers from company level through brigade-level exercises." },
+    { date: "February 14, 1991", title: "Movement to the Border", description: "Task Force 2-70 Armor moves west from TAA Thompson to new positions along the Iraqi border, participating in a Corps-level rehearsal practicing movement techniques for the ground campaign. Movement takes three days until arriving at Forward Assembly Area (FAA) Garcia." },
+    { date: "February 21, 1991", title: "Operations Order Issued", description: "The task force headquarters issues the operations order for Desert Storm. For the first time, soldiers learn their part in the ground offensive. Due to their advanced position near the Iraqi border and concerns for operational security, no phone facilities are available. Over the next few days, all outside contact including mail is curtailed." },
+    { date: "February 24, 1991", title: "G-Day: Ground War Begins", description: "At 6:30 p.m., Task Force 2-70 begins its invasion of Iraq as part of VII Corps' main flanking attack against the Republican Guard—almost 18 hours earlier than initially planned due to the success of Coalition forces to the east. The task force moves 30 kilometers into Iraq and halts until morning." },
+    { date: "February 25, 1991", title: "Advance to Al Busayyah", description: "The weather deteriorates as the task force moves north. By late afternoon, the task force advances in a driving storm, halting at 8:30 p.m. along Phase Line South Carolina near the village of Al Busayyah. The night is harsh with driving rain, lightning, and thunder. 2nd Brigade has halted within the security zone of Iraqi defenses, resulting in firefights with outposts. At 11:23 p.m., 2-1 \"Iron Deuce\" Field Artillery begins bombardment, firing over 1,200 155mm howitzer rounds and 350 MLRS rockets at the Iraqi defenders through the night." },
+    { date: "February 26, 1991", title: "Battle of Al Busayyah", description: "At 6:30 a.m., Task Force 2-70 as part of 2nd Brigade begins the assault of Al Busayyah. Conscripts outside the village surrender quickly, but a Commando battalion within the town holds out, forcing Task Force 6-6 Infantry to reduce the resistance with direct fire. Task Force 2-70 captures 16 enemy prisoners of war, destroying 7 tanks, 2 BRDMs, 1 BMP, and 25 wheeled vehicles. The brigade continues north, shifting eastward as the VII Corps' great wheel continues—movement runs from 10:30 a.m. until the next morning, with only three 40-minute halts for fuel." },
+    { date: "February 27, 1991", title: "Battle of Medina Ridge", description: "As the horizon lightens, the task force encounters positions of the Republican Guard Adnan Infantry Division in what becomes the Battle of the Northern Shoulder—capturing 30 prisoners and destroying 8 tanks, 11 BMPs, 3 BRDMs, and 34 trucks. At 8:30 a.m., 2nd Brigade halts to refuel as Iraqi artillery falls in the area. At 11:45 a.m., lead elements strike the Medina Armored Division's 2nd and 14th Brigades in prepared positions. Over 45 minutes, the task force captures over 50 prisoners while destroying 28 tanks, 10 BMPs, and 4–5 air defense or command vehicles—the largest tank battle the US has fought since World War II. The 2nd Brigade, Medina Division, ceases to exist. By evening, Task Force 2-70 is black on fuel with less than two hours of movement. At 11:30 p.m., an emergency resupply from 3rd Armored Division restores the task force to green." },
+    { date: "February 28, 1991", title: "Ceasefire Declared", description: "At first light, Task Force 2-70 moves east. At 7:30 a.m., the task force attacks an Iraqi air defense artillery site in its last engagement. The cessation of offensive actions goes into effect at 8:00 p.m. The day's toll: 42 enemy prisoners of war captured; 7 tanks, 4 BMPs, 1 BRDM, 2 anti-aircraft guns, and 8 trucks destroyed." },
+    { date: "March 1, 1991", title: "Raid into Kuwait", description: "The task force conducts a raid from its positions into Kuwait with a tank company team, battalion scouts, and engineer platoon—destroying an additional tank, 3 BMPs, 2 MTLBs, numerous trucks, and capturing three prisoners." },
+    { date: "March 4, 1991", title: "Move into Kuwait", description: "Task Force 2-70 moves into Kuwait, occupying a road intersection in the northwest corner of the country." },
+    { date: "March 8, 1991", title: "Cease-Fire Demarcation Line", description: "Task Force 2-70 moves north into the Ramallah oil fields, occupying a section of the cease-fire demarcation line in Iraq. Companies rotate manning a checkpoint, preventing Iraqi civilians from fleeing south." },
+    { date: "March 23, 1991", title: "Oral History Interviews", description: "A Military History Detachment conducts oral history interviews of key task force personnel. The importance of the February 27 engagement—now known as the Battle of Medina Ridge—continues to grow. An artist from the Center of Military History arrives to capture the look of the vehicles for future artwork of the battle." },
+    { date: "April 12, 1991", title: "Return to Saudi Arabia", description: "Task Force 2-70 moves rapidly back into Saudi Arabia, occupying a base camp near King Khalid Military City. It becomes a battalion again as Charlie Company returns to its control." },
+    { date: "April 17, 1991", title: "Tank Turn-In", description: "Tank companies move to an empty space in the desert, signing over their tanks to the 1st Infantry Division. The battalion is now a tankless tank battalion. The main body remains in a tent city at King Khalid Military City, waiting for flights home as daytime temperatures exceed 110 degrees." },
+    { date: "April 1991", title: "Rear Detachment Operations", description: "A rear detachment road marches to Khobar Towers, taking the tracked and wheeled vehicles being shipped back to Germany to port. They sign for four tank companies of brand-new M1A1 HA tanks to ship home." },
+    { date: "April 28, 1991", title: "Main Body Flies Home", description: "The main body flies from King Khalid Military City to Nuremberg for the first large welcome home ceremonies." },
+    { date: "May 5, 1991", title: "Homecoming to Erlangen", description: "The final rear detachment departs Dammam, arriving in Nuremberg for the last welcome home celebration. All the battalion is back except for a few soldiers serving as supercargoes on ships returning the equipment. The Iron Tigers are awarded the Valorous Unit Award." },
+    { date: "June 4, 1991", title: "VII Corps Welcome Home Ceremony", description: "Erlangen hosts the VII Corps Welcome Home Ceremony. Vice President Dan Quayle presents four Silver Stars to VII Corps soldiers. A memorial service is held for the four soldiers the 1st Armored Division lost in Desert Storm." },
+    { date: "July 3, 1991", title: "1st Armored Division Victory Celebration", description: "The division's Victory Celebration is held at Katterbach Airfield. Soldiers pass in review of VII Corps commander, Lieutenant General Frederick Franks. Within the month, 1st Armored Division headquarters will be deactivated as part of the drawdown in Europe." }
   ];
 
   const scrollToSection = (id) => {
@@ -1489,7 +1511,7 @@ function App() {
           </div>
 
           <div className="timeline">
-            {timeline.map((item, index) => (
+            {(timelineExpanded ? timeline : timeline.slice(0, 4)).map((item, index) => (
               <div key={index} className="timeline-item">
                 <div className="timeline-dot"></div>
                 <div className="timeline-date">
@@ -1501,6 +1523,18 @@ function App() {
                 </div>
               </div>
             ))}
+          </div>
+          <div id="timeline-toggle" className="timeline-toggle">
+            <button className="timeline-expand-btn" onClick={() => {
+              if (timelineExpanded) {
+                setTimelineExpanded(false);
+                setTimeout(() => document.getElementById('timeline-toggle')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 0);
+              } else {
+                setTimelineExpanded(true);
+              }
+            }}>
+              {timelineExpanded ? 'Collapse Timeline' : `View Full Timeline (${timeline.length} events)`}
+            </button>
           </div>
         </div>
       </section>
